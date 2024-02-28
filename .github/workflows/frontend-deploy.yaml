@@ -15,7 +15,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20" 
-      - run: cd client/
+      - run: cd 
+      - run: cd /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/client/
+      - run: pwd
       - run: npm install
       - run: npm run build
 
