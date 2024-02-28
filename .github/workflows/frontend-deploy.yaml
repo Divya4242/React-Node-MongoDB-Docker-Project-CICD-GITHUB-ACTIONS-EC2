@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      
+    paths: 'frontend/**' 
 jobs:
   deploy:
     runs-on: self-hosted
@@ -14,6 +14,6 @@ jobs:
           echo "Hello Bro"
           pwd
           cd 
-          touch puu.txt
+          touch puu2.txt
         
         
