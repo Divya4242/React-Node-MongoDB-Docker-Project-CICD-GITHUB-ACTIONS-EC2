@@ -2,8 +2,8 @@ name: Running Self Hosed Runner
 on:
   # activates the workflow when there is a push on the main branch
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
     paths:  
       - 'client/**'
      
