@@ -24,4 +24,5 @@ jobs:
       - run: npm run build
 
       - run: |
-          rsync -avz --progress -e ssh /build/ ubuntu@13.233.19.64:/tempdata
+          working-directory: ./client
+          rsync -avz --progress -e ssh build/ ubuntu@13.233.19.64:/tempdata
