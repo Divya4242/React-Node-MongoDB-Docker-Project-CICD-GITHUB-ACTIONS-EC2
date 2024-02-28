@@ -27,8 +27,8 @@ jobs:
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avzr --delete
-          path: build/
-          remote_path: /var/www/html/
+          path: home/ubuntu/actions-runner/_work/react-node-project/react-node-project/client$
+          remote_path: /tempdata
           remote_host: ec2-13-233-19-64.ap-south-1.compute.amazonaws.com
           remote_user: ubuntu
           remote_key: ${{ secrets.PRIVATE_KEY }}
