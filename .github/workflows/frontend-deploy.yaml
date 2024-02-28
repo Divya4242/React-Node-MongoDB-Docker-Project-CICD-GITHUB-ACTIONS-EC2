@@ -9,8 +9,6 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Checkout Latest Repo
-        uses: actions/checkout@v3
       - name: Print echo
         run: |
           echo "Hello Bro"
