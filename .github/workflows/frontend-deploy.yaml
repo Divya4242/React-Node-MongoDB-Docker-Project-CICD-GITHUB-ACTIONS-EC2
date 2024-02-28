@@ -12,7 +12,8 @@ jobs:
       - name: Print echo
         run: |
           echo "Hello Bro"
-          ls
           pwd
+          cd 
+          touch puu.txt
         
         
