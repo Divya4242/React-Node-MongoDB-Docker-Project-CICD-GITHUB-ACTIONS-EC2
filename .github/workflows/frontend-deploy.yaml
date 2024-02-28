@@ -2,9 +2,11 @@ name: Running Self Hosed Runner
 on:
   # activates the workflow when there is a push on the main branch
   push:
-    branches:
-      - main
-    paths: './client/**' 
+    # branches:
+    #   - main
+    paths:  
+      - 'client/**'
+     
 jobs:
   deploy:
     runs-on: self-hosted
