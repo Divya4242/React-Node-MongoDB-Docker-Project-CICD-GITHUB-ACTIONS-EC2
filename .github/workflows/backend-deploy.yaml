@@ -1,0 +1,32 @@
+name: Deploy backend code to backend server
+on:
+  # activates the workflow when there is a push on the main branch
+  push:
+    branches:
+      - main
+    # paths:  
+    #   - 'server/**'
+  workflow_dispatch:
+     
+jobs:
+  deploy:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - name: Checkout Latest Repo
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20" 
+      - run: npm install
+      - run: npm run build
+
+      - run: |
+          rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/server  ubuntu@15.206.27.102:/backenddata/
+          ssh ubuntu@15.206.27.102
+          cd backenddata/
+          npm start
+          sudo systemctl restart nginx
