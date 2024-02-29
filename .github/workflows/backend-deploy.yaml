@@ -7,6 +7,9 @@ on:
     # paths:  
     #   - 'server/**'
   workflow_dispatch:
+
+env:
+  KEY: ${{ secrets.PRIVATE_KEY }}
      
 jobs:
   deploy:
@@ -19,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
 
       - run: |
-          rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/server  ubuntu@15.206.27.102:/backenddata/
+          rsync -avz --progress --delete -e "ssh -i ${{ env.KEY }}" /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/server  ubuntu@15.206.27.102:/backenddata/
           ssh ubuntu@15.206.27.102
           cd backenddata/
           npm start
