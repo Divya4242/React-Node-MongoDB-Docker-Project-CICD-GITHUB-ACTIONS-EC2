@@ -17,12 +17,6 @@ jobs:
     steps:
       - name: Checkout Latest Repo
         uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20" 
-      - run: npm install
-      - run: npm run build
 
       - run: |
           rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/server  ubuntu@15.206.27.102:/backenddata/
