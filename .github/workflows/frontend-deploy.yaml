@@ -1,4 +1,12 @@
-name: Running Self Hosed Runner
+# This workflow will transer frontend repo build to the ec2 machine,
+# the ec2 machine where build will be deploy is use to serve frontend for web application
+# When there is a push to the "main" branch in "client" repo this workflow will run.
+#
+# I have used custom ec2 as a github action runner for this repo. i have configured
+# that ec2 for specific task to run as a github action runner.
+#
+# In FRONTEND ec2 instance nginx, node js is pre-installed.
+name: Deploy frontend build to frontend server
 on:
   # activates the workflow when there is a push on the main branch
   push:
