@@ -54,9 +54,8 @@ jobs:
           context: ./server/
           push: true
           tags: divyapatel42/ecommerce-webapp:backendGithubActions
-      #- run: |
-       #   rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/server  ubuntu@15.206.27.102:~/backenddata
-        #  ssh ubuntu@15.206.27.102
-         # cd ~/backenddata
-          #npm start
-          #sudo systemctl restart nginx
+      - run: |
+          ssh ubuntu@65.0.173.69
+          docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions || true
+          docker rm -f \$(docker ps -q --filter "publish=8000/tcp")
+          docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions
