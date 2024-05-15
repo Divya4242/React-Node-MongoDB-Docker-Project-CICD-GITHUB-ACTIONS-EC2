@@ -39,7 +39,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        run: pwd && ls
+        name: present working directory
+        run: pwd
+      -
+        name: list all items
+        run: ls
+      -
+        name: cat dockerfile
+        run: cat Dockerfile
       -
         name: Build and push
         uses: docker/build-push-action@v5
