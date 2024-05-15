@@ -55,7 +55,7 @@ jobs:
           push: true
           tags: divyapatel42/ecommerce-webapp:backendGithubActions
       - name: multiple command
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: 65.0.173.69
           username: ubuntu
