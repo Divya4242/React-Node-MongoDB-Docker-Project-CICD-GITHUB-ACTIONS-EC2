@@ -57,7 +57,7 @@ jobs:
       - name: multiple command
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
+          host: 65.0.173.69
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
