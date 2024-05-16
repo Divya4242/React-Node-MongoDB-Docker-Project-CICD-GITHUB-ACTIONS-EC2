@@ -57,5 +57,4 @@ jobs:
      - run: |
           ssh ubuntu@65.0.173.69
           ls
-           docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-           docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
+          
