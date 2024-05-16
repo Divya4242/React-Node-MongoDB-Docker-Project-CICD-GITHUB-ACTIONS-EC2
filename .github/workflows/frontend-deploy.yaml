@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Check Deployment Status
         id: check_status
-        run: echo ::set-output name=status::$(cat .github/workflows/deployment_status.txt)
+        run: echo ::set-output name=status::$(cat ../deployment_status.txt)
 
       - name: Check if Deployment was Successful
         run: |
