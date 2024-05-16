@@ -9,11 +9,11 @@
 name: Deploy frontend build to frontend server
 on:
   # activates the workflow when there is a push on the main branch
-  push:
-    branches:
-      - main
-    paths:  
-      - 'client/**'
+ # push:
+  #  branches:
+   #   - main
+    #paths:  
+     # - 'client/**'
   workflow_dispatch:
      
 jobs:
@@ -34,6 +34,6 @@ jobs:
       - run: npm run build
 
       - run: |
-          rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/client/build  ubuntu@13.233.19.64:~/var/www/html/
-          ssh ubuntu@13.233.19.64
+          rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/react-node-project/react-node-project/client/build  ubuntu@13.233.19.64:~/var/www/build/
+          ssh -t ubuntu@13.233.19.64
           sudo systemctl restart nginx
