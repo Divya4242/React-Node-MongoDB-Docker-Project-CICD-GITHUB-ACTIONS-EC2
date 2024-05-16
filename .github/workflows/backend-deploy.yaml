@@ -5,64 +5,67 @@
 # I have used custom ec2 as a github action runner for this repo. i have configured
 # that ec2 for specific task to run as a github action runner.
 #
-# In BACKEND ec2 instance nginx, node js is pre-installed.
+# In BACKEND ec2 instance nginx, docker is pre-installed.
 
 name: Deploy backend code to backend server
 on:
-  # activates the workflow when there is a push on the main branch
-  #push:
-   # branches:
-    #  - main
-    #paths:  
-     # - 'server/**'
+  # Activates the workflow when there is a push on the main branch,
+  # restricted to changes within the "server" directory.
+  push:
+    branches:
+      - main
+    paths:  
+      - 'server/**'
+  # Allows manual triggering of the workflow if needed.
   workflow_dispatch:
      
 jobs:
   deploy-code-in-backend-server:
+   # Specifies that the job will run on a self-hosted runner (EC2 instance in this case).
     runs-on: self-hosted
+   # Sets default working directory for subsequent steps to the "server" directory.
     defaults:
       run:
         working-directory: ./server
     steps:
-      #- name: Checkout Latest Repo
-      #  uses: actions/checkout@v3
-      #-
-       # name: Set up QEMU
-        #uses: docker/setup-qemu-action@v3
-      #-
-      #  name: Set up Docker Buildx
-       # uses: docker/setup-buildx-action@v3
-      #-
-      #  name: Login to Docker Hub
-       # uses: docker/login-action@v3
-        #with:
-         # username: ${{ secrets.DOCKERHUB_USERNAME }}
-          #password: ${{ secrets.DOCKERHUB_TOKEN }}
-      #-
-       # name: present working directory
-        #run: pwd
-      #-
-      #  name: list all items
-       # run: ls
-      #-
-       # name: cat dockerfile
-        #run: cat Dockerfile
-      #-
-       # name: Build and push
-        #uses: docker/build-push-action@v5
-        #with:
-         # context: ./server/
-          #push: true
-          #tags: divyapatel42/ecommerce-webapp:backendGithubActions
-    - name: Setup SSH agent
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
+     # Checks out the latest code from the repository.
+      - name: Checkout Latest Repo
+        uses: actions/checkout@v3
+     
+     # Sets up QEMU for emulation.
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+     
+     # Sets up Docker Buildx for multi-platform builds. 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Run SSH commands
-      run: |
-        ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
+     # Logs in to Docker Hub using Docker credentials stored in GitHub Secrets.
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+           
+     # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server/
+          push: true
+          tags: divyapatel42/ecommerce-webapp:backendGithubActions
+
+     # Sets up SSH agent to allow SSH connections.
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+     # Runs SSH commands on the EC2 machine to deploy the Docker image.
+      - name: Run SSH commands
+        run: |
+          ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
           docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
           docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
           docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-        EOF
+          EOF
