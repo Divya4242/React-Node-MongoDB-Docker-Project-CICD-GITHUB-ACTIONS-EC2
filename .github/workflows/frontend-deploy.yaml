@@ -35,5 +35,4 @@ jobs:
 
       - run: |
           rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/client/build  ubuntu@65.0.173.69:/var/www/build/
-          ssh -t ubuntu@65.0.173.69
-          sudo systemctl restart nginx
+          ssh -t ubuntu@65.0.173.69 'sudo systemctl restart nginx.service'
