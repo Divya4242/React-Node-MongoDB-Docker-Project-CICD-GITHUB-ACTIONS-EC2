@@ -62,7 +62,7 @@ jobs:
     - name: Run SSH commands
       run: |
         ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
-          ls
-          pwd
-          docker ps
+          docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+          docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
+          docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
         EOF
