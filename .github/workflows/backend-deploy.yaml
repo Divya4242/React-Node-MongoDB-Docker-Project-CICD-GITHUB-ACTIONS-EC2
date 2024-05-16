@@ -11,11 +11,11 @@ name: Deploy backend code to backend server
 on:
   # Activates the workflow when there is a push on the main branch,
   # restricted to changes within the "server" directory.
-  push:
-    branches:
-      - main
-    paths:  
-      - 'server/**'
+ # push:
+  #  branches:
+   #   - main
+    #paths:  
+     # - 'server/**'
   # Allows manual triggering of the workflow if needed.
   workflow_dispatch:
      
@@ -69,3 +69,7 @@ jobs:
           docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
           docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
           EOF
+
+      # Create a file indicating the status of the deployment
+      - name: Create status file
+        run: echo "success" > deployment_status.txt
