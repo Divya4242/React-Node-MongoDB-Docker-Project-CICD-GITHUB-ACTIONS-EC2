@@ -54,16 +54,9 @@ jobs:
          # context: ./server/
           #push: true
           #tags: divyapatel42/ecommerce-webapp:backendGithubActions
-      - name: multiple command
-        uses: appleboy/ssh-action@v0.1.3
-        with:
-          host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
-          username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          script: |
-            ls
-            docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+     - run: |
+          ssh ubuntu@65.0.173.69
+          ls
+           docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
             docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
-            docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions
-          
+            docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
