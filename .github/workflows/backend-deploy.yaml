@@ -59,7 +59,7 @@ jobs:
         with:
           host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.PRIVATE_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
             ls
