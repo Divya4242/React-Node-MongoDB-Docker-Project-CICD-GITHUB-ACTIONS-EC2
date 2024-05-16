@@ -72,4 +72,4 @@ jobs:
 
       # Create a file indicating the status of the deployment
       - name: Create status file
-        run: echo "success" > ../deployment_status.txt
+        run: echo "success" > ../deployment_status.txt && pwd
