@@ -8,13 +8,21 @@
 # In FRONTEND ec2 instance nginx, node js is pre-installed.
 name: Deploy frontend build to frontend server
 on:
+   # Runs the workflow when the deployment status file indicates success
+  workflow_run:
+    workflows: ["Deploy backend code to backend server"]
+    types:
+      - completed
+    branches:
+      - main
+  #------------------------------------------------------------------------------
   # activates the workflow when there is a push on the main branch
  # push:
   #  branches:
    #   - main
     #paths:  
      # - 'client/**'
-  workflow_dispatch:
+ # workflow_dispatch:
      
 jobs:
   deploy:
@@ -23,6 +31,20 @@ jobs:
       run:
         working-directory: ./client
     steps:
+      - name: Check Deployment Status
+        id: check_status
+        run: echo ::set-output name=status::$(cat .github/workflows/deployment_status.txt)
+
+      - name: Check if Deployment was Successful
+        run: |
+          if [[ "${{ steps.check_status.outputs.status }}" == "success" ]]; then
+            echo "Deployment was successful"
+          else
+            echo "Deployment failed, exiting..."
+            exit 1
+          fi
+
+          
       - name: Checkout Latest Repo
         uses: actions/checkout@v3
       - name: Setup Node.js
