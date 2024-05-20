@@ -44,6 +44,11 @@ jobs:
       #       echo "Deployment failed, exiting..."
       #       exit 1
       #     fi
+          
+      - name: Checkout Latest Repo
+        uses: actions/checkout@v3
+
+
       - name: Debug Output
         run: |
           echo "Workflow: $GITHUB_WORKFLOW"
@@ -72,9 +77,6 @@ jobs:
             exit 1
           fi      
 
-          
-      - name: Checkout Latest Repo
-        uses: actions/checkout@v3
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
