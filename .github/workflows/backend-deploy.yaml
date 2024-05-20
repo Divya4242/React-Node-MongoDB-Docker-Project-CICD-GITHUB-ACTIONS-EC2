@@ -30,50 +30,50 @@ jobs:
         working-directory: ./server
     steps:
      # Checks out the latest code from the repository.
-      - name: Checkout Latest Repo
-        uses: actions/checkout@v3
+     # - name: Checkout Latest Repo
+      #  uses: actions/checkout@v3
      
      # Sets up QEMU for emulation.
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      #- name: Set up QEMU
+       # uses: docker/setup-qemu-action@v3
      
      # Sets up Docker Buildx for multi-platform builds. 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      #- name: Set up Docker Buildx
+       # uses: docker/setup-buildx-action@v3
 
      # Logs in to Docker Hub using Docker credentials stored in GitHub Secrets.
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #- name: Login to Docker Hub
+       # uses: docker/login-action@v3
+        #with:
+         # username: ${{ secrets.DOCKERHUB_USERNAME }}
+          #password: ${{ secrets.DOCKERHUB_TOKEN }}
            
      # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server/
-          push: true
-          tags: divyapatel42/ecommerce-webapp:backendGithubActions
+      #- name: Build and push
+       # uses: docker/build-push-action@v5
+        #with:
+         # context: ./server/
+          #push: true
+          #tags: divyapatel42/ecommerce-webapp:backendGithubActions
 
      # Sets up SSH agent to allow SSH connections.
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+      #- name: Setup SSH agent
+       # uses: webfactory/ssh-agent@v0.9.0
+        #with:
+         # ssh-private-key: ${{ secrets.SSH_KEY }}
 
      # Runs SSH commands on the EC2 machine to deploy the Docker image.
-      - name: Run SSH commands
-        run: |
-          ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
-          docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-          docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
-          docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-          EOF
+      #- name: Run SSH commands
+       # run: |
+        #  ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
+         # docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+          #docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
+          #docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+          #EOF
 
       # Create a file indicating the status of the deployment
-     # - name: Create status file
-      #  run: echo "success" > ../deployment_status.txt
+      - name: Create status file
+        run: echo "success" >> deployment_status.txt
 
       - name: Upload deployment status
         uses: actions/upload-artifact@v2
