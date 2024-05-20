@@ -48,10 +48,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: deployment-status
-          path: backend-deployment
+          path: ../server/
       - name: Read deployment status
         id: read-deployment-status
-        run: echo ::set-output name=status::$(cat backend-deployment/deployment_status.txt)
+        run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
       - name: Check deployment status
         run: |
           status=$(echo "${{ steps.read-deployment-status.outputs.status }}")
