@@ -58,12 +58,12 @@ jobs:
           pwd
           
       - name: Download deployment status
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: deployment-status
-          path: ../server/deployment_status.txt
+          path: .
       - name: List files
-        run: ls -al ../server
+        run: ls -al ./
       - name: Read deployment status
         id: read-deployment-status
         run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
