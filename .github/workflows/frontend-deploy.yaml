@@ -60,9 +60,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: deployment-status
-        #  path: ./downloaded-artifacts
+          path: ../server
       - name: List files
-        run: ls -al downloaded-artifacts 
+        run: ls -al ../server
       - name: Read deployment status
         id: read-deployment-status
         run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
