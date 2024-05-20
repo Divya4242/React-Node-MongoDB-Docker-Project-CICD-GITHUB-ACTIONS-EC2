@@ -44,6 +44,13 @@ jobs:
       #       echo "Deployment failed, exiting..."
       #       exit 1
       #     fi
+      - name: Debug Output
+        run: |
+          echo "Workflow: $GITHUB_WORKFLOW"
+          echo "Event name: $GITHUB_EVENT_NAME"
+          echo "Workflow run ID: $GITHUB_RUN_ID"
+          echo "Workflow run number: $GITHUB_RUN_NUMBER"
+          
       - name: Download deployment status
         uses: actions/download-artifact@v2
         with:
