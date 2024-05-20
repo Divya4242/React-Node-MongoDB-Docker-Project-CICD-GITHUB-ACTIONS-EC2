@@ -73,10 +73,10 @@ jobs:
 
       # Create a file indicating the status of the deployment
       - name: Create status file
-        run: echo "success" >> deployment_status.txt && pwd && ls
+        run: echo "success" > deployment_status.txt && pwd && ls
 
       - name: Upload deployment status
         uses: actions/upload-artifact@v2
         with:
           name: deployment-status
-          path: deployment_status.txt    
+          path: ./server/deployment_status.txt    
