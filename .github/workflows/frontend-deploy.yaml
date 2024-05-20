@@ -56,27 +56,41 @@ jobs:
           echo "Workflow run ID: $GITHUB_RUN_ID"
           echo "Workflow run number: $GITHUB_RUN_NUMBER"
           pwd
-          
-      - name: Download deployment status
-        uses: actions/download-artifact@v4
+
+      - name: Get latest run ID
+        id: get_run_id
+        run: |
+          latest_run_id=$(gh api repos/:owner/:repo/actions/workflows/backend-deploy.yaml/runs --jq '.workflow_runs | map(select(.conclusion == "success")) | first.id')
+          echo "latest_run_id=${latest_run_id}" >> $GITHUB_ENV
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
         with:
           name: deployment-status
-          path: .
+          run-id: ${{ env.latest_run_id }}
+
       - name: List files
-        run: ls -al ./
-      - name: Read deployment status
-        id: read-deployment-status
-        run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
-      - name: Check deployment status
-        run: |
-          status=$(echo "${{ steps.read-deployment-status.outputs.status }}")
-          if [ "$status" = "success" ]; then
-            echo "Backend deployment successful, proceeding with frontend deployment"
-            # Add your frontend deployment steps here
-          else
-            echo "Backend deployment failed, aborting frontend deployment"
-            exit 1
-          fi      
+        run: ls -la
+      # - name: Download deployment status
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: deployment-status
+      #     path: .
+      # - name: List files
+      #   run: ls -al ./
+      # - name: Read deployment status
+      #   id: read-deployment-status
+      #   run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
+      # - name: Check deployment status
+      #   run: |
+      #     status=$(echo "${{ steps.read-deployment-status.outputs.status }}")
+      #     if [ "$status" = "success" ]; then
+      #       echo "Backend deployment successful, proceeding with frontend deployment"
+      #       # Add your frontend deployment steps here
+      #     else
+      #       echo "Backend deployment failed, aborting frontend deployment"
+      #       exit 1
+      #     fi      
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
