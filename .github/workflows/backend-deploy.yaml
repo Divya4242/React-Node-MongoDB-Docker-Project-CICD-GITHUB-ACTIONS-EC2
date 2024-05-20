@@ -22,7 +22,8 @@ on:
 jobs:
   deploy-code-in-backend-server:
    # Specifies that the job will run on a self-hosted runner (EC2 instance in this case).
-    runs-on: self-hosted
+    #runs-on: self-hosted
+    runs-on: ubuntu-latest
    # Sets default working directory for subsequent steps to the "server" directory.
     defaults:
       run:
@@ -71,5 +72,11 @@ jobs:
           EOF
 
       # Create a file indicating the status of the deployment
-      - name: Create status file
-        run: echo "success" > ../deployment_status.txt
+     # - name: Create status file
+      #  run: echo "success" > ../deployment_status.txt
+
+      - name: Upload deployment status
+        uses: actions/upload-artifact@v2
+        with:
+          name: deployment-status
+          path: deployment_status.txt    
