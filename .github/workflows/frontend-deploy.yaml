@@ -60,7 +60,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: deployment-status
-          path: ../server
+          path: ../server/deployment_status.txt
       - name: List files
         run: ls -al ../server
       - name: Read deployment status
