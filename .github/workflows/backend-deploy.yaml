@@ -27,12 +27,11 @@ jobs:
    # Sets default working directory for subsequent steps to the "server" directory.
     defaults:
       run:
-        #working-directory: ./server
-        working-directory: /server
+        working-directory: ./server
     steps:
      # Checks out the latest code from the repository.
-     # - name: Checkout Latest Repo
-      #  uses: actions/checkout@v3
+      - name: Checkout Latest Repo
+        uses: actions/checkout@v3
      
      # Sets up QEMU for emulation.
       #- name: Set up QEMU
