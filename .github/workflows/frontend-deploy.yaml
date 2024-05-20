@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./client
+        working-directory: ./server
     steps:
       - name: Checkout Latest Repo
         uses: actions/checkout@v4
@@ -24,6 +24,7 @@ jobs:
           echo "Workflow run ID: $GITHUB_RUN_ID"
           echo "Workflow run number: $GITHUB_RUN_NUMBER"
           pwd
+          ls
 
       - name: Download deployment status
         uses: actions/download-artifact@v4
