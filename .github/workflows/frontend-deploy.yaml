@@ -1,91 +1,119 @@
-# This workflow will transer frontend repo build to the ec2 machine,
-# the ec2 machine where build will be deploy is use to serve frontend for web application
-# When there is a push to the "main" branch in "client" repo this workflow will run.
-#
-# I have used custom ec2 as a github action runner for this repo. i have configured
-# that ec2 for specific task to run as a github action runner.
-#
-# In FRONTEND ec2 instance nginx, node js is pre-installed.
-name: Deploy frontend build to frontend server
+# two.yaml
+name: Workflow Two
+
 on:
-   # Runs the workflow when the deployment status file indicates success
-  workflow_run:
-    workflows: ["Deploy backend code to backend server"]
-    types:
-      - completed
+  pull_request:
     branches:
       - main
-  #------------------------------------------------------------------------------
-  # activates the workflow when there is a push on the main branch
- # push:
-  #  branches:
-   #   - main
-    #paths:  
-     # - 'client/**'
- # workflow_dispatch:
-     
+
 jobs:
   deploy:
-   # runs-on: self-hosted
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./client
     steps:
-      # - name: Check Deployment Status
-      #   id: check_status
-      #   run: echo ::set-output name=status::$(cat ../deployment_status.txt)
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: my-artifact
+    - name: Deploy
+      run: |
+        # Use the downloaded artifact here
+        cat artifact.txt
 
-      # - name: Check if Deployment was Successful
-      #   run: |
-      #     if [[ "${{ steps.check_status.outputs.status }}" == "success" ]]; then
-      #       echo "Deployment was successful"
-      #     else
-      #       echo "Deployment failed, exiting..."
-      #       exit 1
-      #     fi
+
+
+
+
+
+
+
+# # This workflow will transer frontend repo build to the ec2 machine,
+# # the ec2 machine where build will be deploy is use to serve frontend for web application
+# # When there is a push to the "main" branch in "client" repo this workflow will run.
+# #
+# # I have used custom ec2 as a github action runner for this repo. i have configured
+# # that ec2 for specific task to run as a github action runner.
+# #
+# # In FRONTEND ec2 instance nginx, node js is pre-installed.
+# name: Deploy frontend build to frontend server
+# on:
+#    # Runs the workflow when the deployment status file indicates success
+#   workflow_run:
+#     workflows: ["Deploy backend code to backend server"]
+#     types:
+#       - completed
+#     branches:
+#       - main
+#   #------------------------------------------------------------------------------
+#   # activates the workflow when there is a push on the main branch
+#  # push:
+#   #  branches:
+#    #   - main
+#     #paths:  
+#      # - 'client/**'
+#  # workflow_dispatch:
+     
+# jobs:
+#   deploy:
+#    # runs-on: self-hosted
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working-directory: ./client
+#     steps:
+#       # - name: Check Deployment Status
+#       #   id: check_status
+#       #   run: echo ::set-output name=status::$(cat ../deployment_status.txt)
+
+#       # - name: Check if Deployment was Successful
+#       #   run: |
+#       #     if [[ "${{ steps.check_status.outputs.status }}" == "success" ]]; then
+#       #       echo "Deployment was successful"
+#       #     else
+#       #       echo "Deployment failed, exiting..."
+#       #       exit 1
+#       #     fi
           
-      - name: Checkout Latest Repo
-        uses: actions/checkout@v3
+#       - name: Checkout Latest Repo
+#         uses: actions/checkout@v3
 
 
-      - name: Debug Output
-        run: |
-          echo "Workflow: $GITHUB_WORKFLOW"
-          echo "Event name: $GITHUB_EVENT_NAME"
-          echo "Workflow run ID: $GITHUB_RUN_ID"
-          echo "Workflow run number: $GITHUB_RUN_NUMBER"
-          pwd
+#       - name: Debug Output
+#         run: |
+#           echo "Workflow: $GITHUB_WORKFLOW"
+#           echo "Event name: $GITHUB_EVENT_NAME"
+#           echo "Workflow run ID: $GITHUB_RUN_ID"
+#           echo "Workflow run number: $GITHUB_RUN_NUMBER"
+#           pwd
           
-      - name: Download deployment status
-        uses: actions/download-artifact@v4
-        with:
-          name: deployment-status
-          path: .
-      - name: List files
-        run: ls -al ./
-      - name: Read deployment status
-        id: read-deployment-status
-        run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
-      - name: Check deployment status
-        run: |
-          status=$(echo "${{ steps.read-deployment-status.outputs.status }}")
-          if [ "$status" = "success" ]; then
-            echo "Backend deployment successful, proceeding with frontend deployment"
-            # Add your frontend deployment steps here
-          else
-            echo "Backend deployment failed, aborting frontend deployment"
-            exit 1
-          fi      
+#       - name: Download deployment status
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: deployment-status
+#           path: .
+#       - name: List files
+#         run: ls -al ./
+#       - name: Read deployment status
+#         id: read-deployment-status
+#         run: echo ::set-output name=status::$(cat ../server/deployment_status.txt)
+#       - name: Check deployment status
+#         run: |
+#           status=$(echo "${{ steps.read-deployment-status.outputs.status }}")
+#           if [ "$status" = "success" ]; then
+#             echo "Backend deployment successful, proceeding with frontend deployment"
+#             # Add your frontend deployment steps here
+#           else
+#             echo "Backend deployment failed, aborting frontend deployment"
+#             exit 1
+#           fi      
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20" 
-      - run: pwd
-      - run: npm install
-      - run: npm run build
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: "20" 
+#       - run: pwd
+#       - run: npm install
+#       - run: npm run build
 
-      - run: |
-          rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/client/build  ubuntu@65.0.173.69:/var/www/build/
-          ssh -t ubuntu@65.0.173.69 'sudo systemctl restart nginx.service'
+#       - run: |
+#           rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/client/build  ubuntu@65.0.173.69:/var/www/build/
+#           ssh -t ubuntu@65.0.173.69 'sudo systemctl restart nginx.service'
