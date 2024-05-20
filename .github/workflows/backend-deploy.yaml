@@ -1,82 +1,108 @@
-# This workflow will transer backend repo code to the ec2 machine,
-# the ec2 machine where code will be deploy is use to serve backend for web application
-# When there is a push to the "main" branch in "server" repo this workflow will run.
-#
-# I have used custom ec2 as a github action runner for this repo. i have configured
-# that ec2 for specific task to run as a github action runner.
-#
-# In BACKEND ec2 instance nginx, docker is pre-installed.
+# one.yaml
+name: Workflow One
 
-name: Deploy backend code to backend server
 on:
-  # Activates the workflow when there is a push on the main branch,
-  # restricted to changes within the "server" directory.
- # push:
-  #  branches:
-   #   - main
-    #paths:  
-     # - 'server/**'
-  # Allows manual triggering of the workflow if needed.
-  workflow_dispatch:
-     
+  push:
+    branches:
+      - main
+
 jobs:
-  deploy-code-in-backend-server:
-   # Specifies that the job will run on a self-hosted runner (EC2 instance in this case).
-    #runs-on: self-hosted
+  build:
     runs-on: ubuntu-latest
-   # Sets default working directory for subsequent steps to the "server" directory.
-    defaults:
-      run:
-        working-directory: ./server
     steps:
-     # Checks out the latest code from the repository.
-      - name: Checkout Latest Repo
-        uses: actions/checkout@v3
-     
-     # Sets up QEMU for emulation.
-      #- name: Set up QEMU
-       # uses: docker/setup-qemu-action@v3
-     
-     # Sets up Docker Buildx for multi-platform builds. 
-      #- name: Set up Docker Buildx
-       # uses: docker/setup-buildx-action@v3
+    - name: Build
+      run: |
+        # Your build commands here
+        echo "Building something..."
+        touch artifact.txt
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: artifact.txt
 
-     # Logs in to Docker Hub using Docker credentials stored in GitHub Secrets.
-      #- name: Login to Docker Hub
-       # uses: docker/login-action@v3
-        #with:
-         # username: ${{ secrets.DOCKERHUB_USERNAME }}
-          #password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+
+# # This workflow will transer backend repo code to the ec2 machine,
+# # the ec2 machine where code will be deploy is use to serve backend for web application
+# # When there is a push to the "main" branch in "server" repo this workflow will run.
+# #
+# # I have used custom ec2 as a github action runner for this repo. i have configured
+# # that ec2 for specific task to run as a github action runner.
+# #
+# # In BACKEND ec2 instance nginx, docker is pre-installed.
+
+# name: Deploy backend code to backend server
+# on:
+#   # Activates the workflow when there is a push on the main branch,
+#   # restricted to changes within the "server" directory.
+#  # push:
+#   #  branches:
+#    #   - main
+#     #paths:  
+#      # - 'server/**'
+#   # Allows manual triggering of the workflow if needed.
+#   workflow_dispatch:
+     
+# jobs:
+#   deploy-code-in-backend-server:
+#    # Specifies that the job will run on a self-hosted runner (EC2 instance in this case).
+#     #runs-on: self-hosted
+#     runs-on: ubuntu-latest
+#    # Sets default working directory for subsequent steps to the "server" directory.
+#     defaults:
+#       run:
+#         working-directory: ./server
+#     steps:
+#      # Checks out the latest code from the repository.
+#       - name: Checkout Latest Repo
+#         uses: actions/checkout@v3
+     
+#      # Sets up QEMU for emulation.
+#       #- name: Set up QEMU
+#        # uses: docker/setup-qemu-action@v3
+     
+#      # Sets up Docker Buildx for multi-platform builds. 
+#       #- name: Set up Docker Buildx
+#        # uses: docker/setup-buildx-action@v3
+
+#      # Logs in to Docker Hub using Docker credentials stored in GitHub Secrets.
+#       #- name: Login to Docker Hub
+#        # uses: docker/login-action@v3
+#         #with:
+#          # username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           #password: ${{ secrets.DOCKERHUB_TOKEN }}
            
-     # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
-      #- name: Build and push
-       # uses: docker/build-push-action@v5
-        #with:
-         # context: ./server/
-          #push: true
-          #tags: divyapatel42/ecommerce-webapp:backendGithubActions
+#      # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
+#       #- name: Build and push
+#        # uses: docker/build-push-action@v5
+#         #with:
+#          # context: ./server/
+#           #push: true
+#           #tags: divyapatel42/ecommerce-webapp:backendGithubActions
 
-     # Sets up SSH agent to allow SSH connections.
-      #- name: Setup SSH agent
-       # uses: webfactory/ssh-agent@v0.9.0
-        #with:
-         # ssh-private-key: ${{ secrets.SSH_KEY }}
+#      # Sets up SSH agent to allow SSH connections.
+#       #- name: Setup SSH agent
+#        # uses: webfactory/ssh-agent@v0.9.0
+#         #with:
+#          # ssh-private-key: ${{ secrets.SSH_KEY }}
 
-     # Runs SSH commands on the EC2 machine to deploy the Docker image.
-      #- name: Run SSH commands
-       # run: |
-        #  ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
-         # docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-          #docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
-          #docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-          #EOF
+#      # Runs SSH commands on the EC2 machine to deploy the Docker image.
+#       #- name: Run SSH commands
+#        # run: |
+#         #  ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
+#          # docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+#           #docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
+#           #docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+#           #EOF
 
-      # Create a file indicating the status of the deployment
-      - name: Create status file
-        run: echo "success" > deployment_status.txt 
+#       # Create a file indicating the status of the deployment
+#       - name: Create status file
+#         run: echo "success" > deployment_status.txt 
 
-      - name: Upload deployment status
-        uses: actions/upload-artifact@v4
-        with:
-          name: deployment-status
-          path: ./server/deployment_status.txt    
+#       - name: Upload deployment status
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: deployment-status
+#           path: ./server/deployment_status.txt    
