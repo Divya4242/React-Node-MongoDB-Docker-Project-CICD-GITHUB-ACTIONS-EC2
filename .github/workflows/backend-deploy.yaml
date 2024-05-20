@@ -73,13 +73,50 @@ jobs:
 
       # Create a file indicating the status of the deployment
       - name: Create status file
-        run: |
-          echo "success" > deployment_status.txt 
-          ls
-          pwd
+        run: echo "success" > deployment_status.txt 
+     
 
       - name: Upload deployment status
         uses: actions/upload-artifact@v4
         with:
           name: deployment-status
           path: ./server/deployment_status.txt    
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: deploy-code-in-backend-server
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - name: Checkout Latest Repo
+        uses: actions/checkout@v4
+
+      - name: Download deployment status
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-status
+          path: .
+
+      - name: Deploy based on status
+        run: |
+          if [[ $(cat deployment_status.txt) == "success" ]]; then
+            echo "Deployment successful!"
+          else
+            echo "Deployment failed due to build issues."
+            exit 1  
+          fi 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20" 
+          
+      - run: pwd
+      - run: npm install
+      - run: npm run build
+
+      - run: |
+          rsync -avz --progress --delete -e ssh /home/ubuntu/actions-runner/_work/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/client/build  ubuntu@65.0.173.69:/var/www/build/
+          ssh -t ubuntu@65.0.173.69 'sudo systemctl restart nginx.service'
