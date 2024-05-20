@@ -26,23 +26,42 @@ on:
      
 jobs:
   deploy:
-    runs-on: self-hosted
+   # runs-on: self-hosted
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./client
     steps:
-      - name: Check Deployment Status
-        id: check_status
-        run: echo ::set-output name=status::$(cat ../deployment_status.txt)
+      # - name: Check Deployment Status
+      #   id: check_status
+      #   run: echo ::set-output name=status::$(cat ../deployment_status.txt)
 
-      - name: Check if Deployment was Successful
+      # - name: Check if Deployment was Successful
+      #   run: |
+      #     if [[ "${{ steps.check_status.outputs.status }}" == "success" ]]; then
+      #       echo "Deployment was successful"
+      #     else
+      #       echo "Deployment failed, exiting..."
+      #       exit 1
+      #     fi
+      - name: Download deployment status
+        uses: actions/download-artifact@v2
+        with:
+          name: deployment-status
+          path: backend-deployment
+      - name: Read deployment status
+        id: read-deployment-status
+        run: echo ::set-output name=status::$(cat backend-deployment/deployment_status.txt)
+      - name: Check deployment status
         run: |
-          if [[ "${{ steps.check_status.outputs.status }}" == "success" ]]; then
-            echo "Deployment was successful"
+          status=$(echo "${{ steps.read-deployment-status.outputs.status }}")
+          if [ "$status" = "success" ]; then
+            echo "Backend deployment successful, proceeding with frontend deployment"
+            # Add your frontend deployment steps here
           else
-            echo "Deployment failed, exiting..."
+            echo "Backend deployment failed, aborting frontend deployment"
             exit 1
-          fi
+          fi      
 
           
       - name: Checkout Latest Repo
