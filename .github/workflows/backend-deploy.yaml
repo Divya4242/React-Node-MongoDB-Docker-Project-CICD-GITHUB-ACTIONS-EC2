@@ -33,28 +33,28 @@ jobs:
       - name: Checkout Latest Repo
         uses: actions/checkout@v4
      
-     # Sets up QEMU for emulation.
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+     # # Sets up QEMU for emulation.
+     #  - name: Set up QEMU
+     #    uses: docker/setup-qemu-action@v3
      
-     # Sets up Docker Buildx for multi-platform builds. 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+     # # Sets up Docker Buildx for multi-platform builds. 
+     #  - name: Set up Docker Buildx
+     #    uses: docker/setup-buildx-action@v3
 
-     # Logs in to Docker Hub using Docker credentials stored in GitHub Secrets.
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-         username: ${{ secrets.DOCKERHUB_USERNAME }}
-         password: ${{ secrets.DOCKERHUB_TOKEN }}
+     # # Logs in to Docker Hub using Docker credentials stored in GitHub Secrets.
+     #  - name: Login to Docker Hub
+     #    uses: docker/login-action@v3
+     #    with:
+     #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+     #     password: ${{ secrets.DOCKERHUB_TOKEN }}
            
-     # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server/
-          push: true
-          tags: divyapatel42/ecommerce-webapp:backendGithubActions
+     # # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
+     #  - name: Build and push
+     #    uses: docker/build-push-action@v5
+     #    with:
+     #      context: ./server/
+     #      push: true
+     #      tags: divyapatel42/ecommerce-webapp:backendGithubActions
 
       # Create a file indicating the status of the deployment
       - name: Create status file
@@ -100,12 +100,13 @@ jobs:
       - run: pwd
       - run: npm install
       - run: npm run build
+      - run: echo ${{ github.workspace }}
 
       - name: rsync deployments
         uses: burnett01/rsync-deployments@7.0.1
         with:
           switches: -avzr --delete
-          path: build/
+          path: ${{ github.workspace }}/build/
           remote_path: /var/www/build/
           remote_host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
           remote_user: ubuntu
