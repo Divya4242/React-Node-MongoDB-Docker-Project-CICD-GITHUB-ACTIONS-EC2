@@ -1,12 +1,3 @@
-# This workflow will transer backend repo code to the ec2 machine,
-# the ec2 machine where code will be deploy is use to serve backend for web application
-# When there is a push to the "main" branch in "server" repo this workflow will run.
-#
-# I have used custom ec2 as a github action runner for this repo. i have configured
-# that ec2 for specific task to run as a github action runner.
-#
-# In BACKEND ec2 instance nginx, docker is pre-installed.
-
 name: Deploy backend code to backend server
 on:
   # Activates the workflow when there is a push on the main branch,
@@ -20,7 +11,7 @@ on:
   workflow_dispatch:
      
 jobs:
-  deploy-code-in-backend-server:
+  deploy-backend-code-in-server:
    # Specifies that the job will run on a self-hosted runner (EC2 instance in this case).
     #runs-on: self-hosted
     runs-on: ubuntu-latest
@@ -67,9 +58,9 @@ jobs:
           path: ./server/deployment_status.txt    
 
 
-  deploy:
+  deploy-frontend-code-in-server:
     runs-on: ubuntu-latest
-    needs: deploy-code-in-backend-server
+    needs: deploy-backend-code-in-server
     defaults:
       run:
         working-directory: ./client
@@ -100,7 +91,6 @@ jobs:
       - run: pwd
       - run: npm install
       - run: npm run build
-      - run: echo ${{ github.workspace }} && pwd
 
       - name: rsync deployments
         uses: burnett01/rsync-deployments@7.0.1
