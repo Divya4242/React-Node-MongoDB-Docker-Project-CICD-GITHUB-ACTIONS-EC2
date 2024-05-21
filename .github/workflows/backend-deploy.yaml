@@ -106,7 +106,7 @@ jobs:
         uses: burnett01/rsync-deployments@7.0.1
         with:
           switches: -avzr --delete
-          path: /home/runner/work/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/client/build/
+          path: build/
           remote_path: /var/www/build/
           remote_host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
           remote_user: ubuntu
