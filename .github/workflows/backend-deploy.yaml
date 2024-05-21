@@ -100,7 +100,7 @@ jobs:
       - run: pwd
       - run: npm install
       - run: npm run build
-      - run: echo ${{ github.workspace }}
+      - run: echo ${{ github.workspace }} && pwd
 
       - name: rsync deployments
         uses: burnett01/rsync-deployments@7.0.1
