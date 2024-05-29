@@ -31,6 +31,11 @@ The deployment process involves:
 - **AWS EC2**: The application is deployed on an AWS EC2 instance.
 - **Conditional Execution**: Deployment only proceeds if the first job is successful, as indicated by the status artifact.
 
+## Screenshots
+![image](https://github.com/Divya4242/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/assets/113757574/6aa4ab06-b0ab-4846-8843-0ba3621d0ff7)
+![image](https://github.com/Divya4242/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/assets/113757574/3953902d-05a1-45dc-82ff-4d1fa73a1f15)
+
+
 ---
 
 For detailed configuration and customization, refer to the `.github/workflows/deployment.yml` file in the repository.
