@@ -12,7 +12,7 @@ This repository contains a full-stack application with a frontend built using Re
 ## Overview
 This project automates the CI/CD process for a full-stack application, enabling efficient development and deployment cycles. The CI/CD pipeline includes jobs for building, testing, and deploying the application, leveraging GitHub Actions and AWS EC2.
 
-Prerequisites
+**Prerequisites:**
 
    • Nginx
 
