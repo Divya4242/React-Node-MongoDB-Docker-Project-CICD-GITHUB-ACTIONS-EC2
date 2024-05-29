@@ -12,6 +12,12 @@ This repository contains a full-stack application with a frontend built using Re
 ## Overview
 This project automates the CI/CD process for a full-stack application, enabling efficient development and deployment cycles. The CI/CD pipeline includes jobs for building, testing, and deploying the application, leveraging GitHub Actions and AWS EC2.
 
+Prerequisites
+
+• Nginx
+
+• Docker
+
 ## CI/CD Pipeline
 The CI/CD pipeline is structured into two jobs:
 1. **Deploy Backend and Create Artifact**: Compiles the code and dockrize the code. Create artiact file indicating status of the job.
