@@ -38,9 +38,10 @@ To implement this CI/CD pipeline:
 3. **Modify GitHub Actions Workflow**:
    - Update the `rsync` deployment action values as needed in the GitHub Actions YAML file.
    - Change the EC2 IP address mentioned in the GitHub Actions YAML file.
-4. Update the `REACT_APP_API_URL` environment variable of .env in the client folder.
+4. Update the `REACT_APP_API_URL` environment variable of [.env](https://github.com/Divya4242/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/blob/main/client/.env) in the client folder.
 5. **Nginx Configuration**:
    - Create two Nginx configuration files in `/etc/nginx/sites-available`.
+     
    **frontend.conf**:
      ```nginx
      # Frontend configuration file
