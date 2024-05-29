@@ -31,12 +31,49 @@ The deployment process involves:
 - **AWS EC2**: The application is deployed on an AWS EC2 instance.
 - **Conditional Execution**: Deployment only proceeds if the first job is successful, as indicated by the status artifact.
 
-## Setup Instructions
+## Implementation Guide
 To implement this CI/CD pipeline:
 1. **Fork the Repository**: Fork this repo to your GitHub account.
 2. **Create EC2 SSH Key Secrets**: Add the required EC2 SSH key secrets in the GitHub Action YAML file.
-3. **Modify Deployment Action Values**: Change the rsync deployment action values as needed in the GitHub Action YAML file.
-4. **Update EC2 IP Address**: Replace the placeholder EC2 IP address in the GitHub Action YAML file with your actual EC2 instance IP address.
+3. **Modify GitHub Actions Workflow**:
+   - Update the `rsync` deployment action values as needed in the GitHub Actions YAML file.
+   - Change the EC2 IP address mentioned in the GitHub Actions YAML file.
+4. Update the `REACT_APP_API_URL` environment variable of .env in the client folder.
+5. **Nginx Configuration**:
+   - Create two Nginx configuration files in `/etc/nginx/sites-available`.
+   **frontend.conf**:
+     ```nginx
+     # Frontend configuration file
+     server {
+         listen 80;
+         server_name your_domain.com.OR_;
+
+         location / {
+             root /var/www/build;
+             index index.html;
+             try_files $uri $uri/ /index.html;
+         }
+     }
+     ```
+
+     **backend.conf**:
+     ```nginx
+     # Backend Configuration File
+     server {
+         listen 80;
+         server_name your_domain.com.OR_;
+
+         location / {
+             proxy_pass http://localhost:8000;
+             proxy_http_version 1.1;
+             proxy_set_header Upgrade $http_upgrade;
+             proxy_set_header Connection 'upgrade';
+             proxy_set_header Host $host;
+             proxy_cache_bypass $http_upgrade;
+         }
+     }
+     ```
+     
 
 ## Screenshots
 ![image](https://github.com/Divya4242/React-Node-MongoDB-Docker-Project-CICD-GITHUB-ACTIONS-EC2/assets/113757574/6aa4ab06-b0ab-4846-8843-0ba3621d0ff7)
