@@ -1,3 +1,5 @@
 static/* linguist-vendored
 *.html linguist-detectable=false
 *.css linguist-detectable=false
+*.yaml linguist-detectable=true
+*.yml linguist-detectable=true
