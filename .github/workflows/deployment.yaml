@@ -95,8 +95,8 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }} 
           
-#       - run: npm install
-#       - run: npm run build
+      - run: npm install
+      - run: npm run build
 
 #       - name: rsync deployments
 #         uses: burnett01/rsync-deployments@7.0.1
