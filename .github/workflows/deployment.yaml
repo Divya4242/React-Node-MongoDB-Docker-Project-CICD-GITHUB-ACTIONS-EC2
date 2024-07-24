@@ -40,12 +40,12 @@ jobs:
          password: ${{ secrets.DOCKERHUB_TOKEN }}
            
      # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server/
-          push: true
-          tags: divyapatel42/ecommerce-webapp:backendGithubActions
+      # - name: Build and push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./server/
+      #     push: true
+      #     tags: divyapatel42/ecommerce-webapp:backendGithubActions
 
       # Create a file indicating the status of the deployment
       - name: Create status file
@@ -89,31 +89,37 @@ jobs:
           node-version: "20" 
           
       - run: pwd
-      - run: npm install
-      - run: npm run build
-
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@7.0.1
+      - name: Cache NPM dependecies
+        uses: actions/cache@v4
         with:
-          switches: -avzr --delete
-          path: client/build/
-          remote_path: /var/www/build/
-          remote_host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
-          remote_user: ubuntu
-          remote_key: ${{ secrets.SSH_KEY }}   
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }} 
+          
+#       - run: npm install
+#       - run: npm run build
 
-#      Sets up SSH agent to allow SSH connections.
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-         ssh-private-key: ${{ secrets.SSH_KEY }}
+#       - name: rsync deployments
+#         uses: burnett01/rsync-deployments@7.0.1
+#         with:
+#           switches: -avzr --delete
+#           path: client/build/
+#           remote_path: /var/www/build/
+#           remote_host: ec2-65-0-173-69.ap-south-1.compute.amazonaws.com
+#           remote_user: ubuntu
+#           remote_key: ${{ secrets.SSH_KEY }}   
 
- #    Runs SSH commands on the EC2 machine to deploy the Docker image.
-      - name: Run SSH commands
-        run: |
-          ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
-          docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-          docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
-          docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
-          sudo systemctl restart nginx
-          EOF
+# #      Sets up SSH agent to allow SSH connections.
+#       - name: Setup SSH agent
+#         uses: webfactory/ssh-agent@v0.9.0
+#         with:
+#          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+#  #    Runs SSH commands on the EC2 machine to deploy the Docker image.
+#       - name: Run SSH commands
+#         run: |
+#           ssh -o StrictHostKeyChecking=no -T ubuntu@65.0.173.69 << 'EOF'
+#           docker rmi -f divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+#           docker rm -f $(docker ps -q --filter "publish=8000/tcp") 2>/dev/null
+#           docker run -d -p 8000:8000 divyapatel42/ecommerce-webapp:backendGithubActions 2>/dev/null
+#           sudo systemctl restart nginx
+#           EOF
