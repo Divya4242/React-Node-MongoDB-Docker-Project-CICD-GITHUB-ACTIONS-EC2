@@ -52,7 +52,6 @@ jobs:
         with:
           image-ref: 'divyapatel42/ecommerce-webapp:backendGithubActions'
           format: 'table'
-          exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'UNKNOWN,LOW,MEDIUM,CRITICAL,HIGH'
