@@ -40,13 +40,23 @@ jobs:
          password: ${{ secrets.DOCKERHUB_TOKEN }}
            
      # Builds the Docker image from the "server" directory and pushes it to Docker Hub.
-      # - name: Build and push
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ./server/
-      #     push: true
-      #     tags: divyapatel42/ecommerce-webapp:backendGithubActions
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server/
+          push: true
+          tags: divyapatel42/ecommerce-webapp:backendGithubActions
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: 'divyapatel42/ecommerce-webapp:backendGithubActions'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'UNKNOWN,LOW,MEDIUM,CRITICAL,HIGH'
+          
       # Create a file indicating the status of the deployment
       - name: Create status file
         run: echo "success" > deployment_status.txt 
