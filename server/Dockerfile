@@ -3,7 +3,7 @@ WORKDIR /backend/
 
 COPY *.json .
 
-RUN npm install -g npx
+#RUN npm install -g npx
 RUN npx npm-force-resolutions
 RUN npm install
 RUN  npm audit fix || true
