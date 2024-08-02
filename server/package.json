@@ -4,6 +4,7 @@
   "description": "A E-commerce website.",
   "main": "app.js",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
   },
