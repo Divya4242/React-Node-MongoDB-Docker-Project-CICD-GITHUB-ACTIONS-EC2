@@ -42,6 +42,6 @@
     "got": "12.1.0",
     "http-cache-semantics": "4.1.1",
     "semver": "7.5.2",
-    "jsonwebtoken": "9.0.0",
+    "jsonwebtoken": "9.0.0"
   }
 }
