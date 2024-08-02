@@ -3,7 +3,7 @@ WORKDIR /backend/
 
 COPY *.json .
 RUN npm install
-RUN  npm audit fix 
+RUN  npm audit fix || true
 
 COPY . .
 
