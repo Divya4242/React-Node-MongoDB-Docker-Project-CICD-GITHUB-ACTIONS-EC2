@@ -40,7 +40,7 @@ const CreateAllFolder = require("./config/uploadFolderCreateScript");
 CreateAllFolder();
 
 app.use(cors({
-    origin: ['*', 'https://kfrontend.devopswithdivya.me']
+    origin: ['https://kfrontend.devopswithdivya.me']
    // methods: 'GET,POST,PUT,DELETE,HEAD,OPTION'
 }));
 
